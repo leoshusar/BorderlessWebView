@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="BorderlessNativeHost/BorderlessNativeHost.csproj" Id="0deffa5c-c831-485d-85fd-90b4d3b1ab64" />
+  <Project Path="BorderlessWebView/BorderlessWebView.csproj" />
+  <Project Path="Installer/Installer.csproj" Id="9f7bf544-3a6d-4e59-bd09-b4a18d08d097" />
+  <Project Path="Packaging/Packaging.csproj" Id="82280368-e38f-4f9c-b55e-319b9cd48324">
+    <Build Project="false" />
+  </Project>
+</Solution>

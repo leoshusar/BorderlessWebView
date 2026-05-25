@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "Borderless WebView",
+    "version": "1.0.0",
+    "description": "Launches a Borderless WebView app with the current tab's URL.",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtuINaw0U0c3D3jk7GsLTnsrO03t1XG/V69uYDePRyKjIEYmd5Twi9Q5Z7FnRC2XjBeVU+eqaubdco9zb1wHPe8dW9jP1Fq9R54+gl9ng6FqUVNe610AcBcSjMy1ObrM3Ww1vVYICIK1wKvJiPcZ33Rg9yUqMebexi7ZPako/BebrOGyQ8cX1j+vJ5i331cBt9vIMOBUW0xk1Q3BNxG1sWs09Mcv+9XXdjbrKsOOQ6ZJ66J0WenhcA60NX6MbbwnjiG1Y1nSboNKQQb5QtDHLkRLep9Wzz/+pLE6q/iafD+5gXmw+3+opGwjesvPOoZ4bxnux+Pl+AUF19bzDpdVwBQIDAQAB",
+    "permissions": ["activeTab", "scripting", "nativeMessaging"],
+    "host_permissions": ["https://*/*"],
+    "background": {
+        "service_worker": "src/background.js",
+        "type": "module"
+    },
+    "icons": {
+        "16": "img/16.png",
+        "24": "img/24.png",
+        "32": "img/32.png",
+        "48": "img/48.png",
+        "64": "img/64.png",
+        "128": "img/128.png",
+        "256": "img/256.png",
+        "512": "img/512.png"
+    },
+    "action": {}
+}

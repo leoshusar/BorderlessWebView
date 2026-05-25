@@ -1,0 +1,9 @@
+{
+  "name": "cz.leoshusar.borderlesswebview",
+  "description": "Launches BorderlessWebView",
+  "path": "BorderlessNativeHost.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://okpjbdkmajcmkfckfocllkgdoimeadcm/"
+  ]
+}

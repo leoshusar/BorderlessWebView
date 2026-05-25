@@ -1,0 +1,83 @@
+﻿<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.Web" />
+ 
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <PublishProfile>win-x64</PublishProfile>
+  </PropertyGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk.Web" />
+
+  <Target Name="Build">
+    <CallTarget Targets="PackAll" />
+  </Target>
+
+  <Target Name="Publish">
+    <CallTarget Targets="PackAll" />
+  </Target>
+
+  <PropertyGroup>
+    <ArtifactsRoot>$(MSBuildThisFileDirectory)bin\$(Configuration)\</ArtifactsRoot>
+    <TempDir>$(ArtifactsRoot)temp\</TempDir>
+    <OutputRoot>$(ArtifactsRoot)dist\</OutputRoot>
+    <AppDir>$(OutputRoot)app\</AppDir>
+
+    <ExtensionSource>..\BorderlessExtension\</ExtensionSource>
+    <ExtensionDestination>$(OutputRoot)chrome-extension\</ExtensionDestination>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ServiceProject Include="..\BorderlessNativeHost\BorderlessNativeHost.csproj" TargetDir="$(TempDir)NativeHost\" />
+    <ServiceProject Include="..\BorderlessWebView\BorderlessWebView.csproj" TargetDir="$(TempDir)WebView\" />
+
+    <InstallerProject Include="..\Installer\Installer.csproj" Mode="Install" TargetDir="$(TempDir)InstallerInstall\" />
+    <InstallerProject Include="..\Installer\Installer.csproj" Mode="Uninstall" TargetDir="$(TempDir)InstallerUninstall\" />
+  </ItemGroup>
+
+  <Target Name="PackAll">
+    <RemoveDir Directories="$(ArtifactsRoot)" />
+    
+    <MakeDir Directories="$(TempDir)" />
+    <MakeDir Directories="$(OutputRoot)" />
+    <MakeDir Directories="$(AppDir)" />
+
+    <MSBuild Projects="@(ServiceProject)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);
+                         PublishProfile=$(PublishProfile);
+                         CopyOutputSymbolsToPublishDirectory=false;
+                         PublishDir=%(TargetDir)" />
+
+    <MSBuild Projects="@(InstallerProject)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);
+                         PublishProfile=$(PublishProfile);
+                         CopyOutputSymbolsToPublishDirectory=false;
+                         InstallerMode=%(InstallerProject.Mode);
+                         PublishDir=%(TargetDir)" />
+
+    <ItemGroup>
+      <AppFiles Include="%(ServiceProject.TargetDir)**\*.*" />
+      <OutputFiles Include="%(InstallerProject.TargetDir)**\*.*" />
+      <ExtensionFiles Include="$(ExtensionSource)**\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(AppFiles)"
+          DestinationFiles="@(AppFiles->'$(AppDir)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+
+    <Copy SourceFiles="@(OutputFiles)"
+          DestinationFiles="@(OutputFiles->'$(OutputRoot)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+
+    <Copy SourceFiles="@(ExtensionFiles)"
+          DestinationFiles="@(ExtensionFiles->'$(ExtensionDestination)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+
+    <MakeDir Directories="$(OutputRoot)UserData\" />
+    <MakeDir Directories="$(OutputRoot)Extensions\" />
+
+    <RemoveDir Directories="$(TempDir)" />
+  </Target>
+
+</Project>
